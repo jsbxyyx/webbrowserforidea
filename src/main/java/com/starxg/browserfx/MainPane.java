@@ -8,37 +8,47 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainPane extends JPanel {
 
-    private ClosableTabbedPane pane;
-    private JButton btn_add;
+    private ClosableTabbedPane tabbedPane;
+    private JButton btnAdd;
     private AtomicInteger tabIndex = new AtomicInteger(1);
 
     MainPane() {
         try {
             initView();
         } catch (Exception e) {
-            Logger.getInstance(BrowserWindowFactory.class).error(e);
+            Logger.getInstance(MainPane.class).error(e);
         }
     }
 
     public void initView() {
         setLayout(new BorderLayout());
 
-        btn_add = new JButton("+");
-        btn_add.addActionListener(e -> {
+        tabbedPane = new ClosableTabbedPane().setCloseListener((index) -> {
+        });
+        btnAdd = new JButton("+");
+        btnAdd.setMargin(new Insets(2, 6, 2, 6));
+        btnAdd.setFocusable(false);
+        btnAdd.setContentAreaFilled(false);
+        btnAdd.addActionListener(e -> {
             addTab("  " + tabIndex.getAndIncrement() + "  ");
         });
-        add(btn_add, BorderLayout.NORTH);
 
-        pane = new ClosableTabbedPane().setCloseListener((index) -> {
-        });
-        add(pane, BorderLayout.CENTER);
+        JPanel placeholder = new JPanel();
+        tabbedPane.insertTab("", null, placeholder, "添加标签", 0);
+        tabbedPane.setTabComponentAt(0, btnAdd);
+
+        add(tabbedPane, BorderLayout.CENTER);
+    }
+
+    public void initAddButton() {
+
     }
 
     public void addTab(String title) {
         try {
-            pane.addTabWithClose(title, new Browser((BrowserView) Class.forName("com.starxg.browserfx.JcefBrowser").newInstance()));
+            tabbedPane.addTabWithClose(title, new Browser((BrowserView) Class.forName("com.starxg.browserfx.JcefBrowser").newInstance()));
         } catch (Exception e) {
-            Logger.getInstance(BrowserWindowFactory.class).error(e);
+            Logger.getInstance(MainPane.class).error(e);
         }
     }
 
