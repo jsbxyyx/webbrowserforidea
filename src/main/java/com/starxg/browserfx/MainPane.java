@@ -6,13 +6,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class BrowserPane extends JPanel {
+public class MainPane extends JPanel {
 
     private ClosableTabbedPane pane;
     private JButton btn_add;
     private AtomicInteger tabIndex = new AtomicInteger(1);
 
-    BrowserPane() {
+    MainPane() {
         try {
             initView();
         } catch (Exception e) {
@@ -25,7 +25,7 @@ public class BrowserPane extends JPanel {
 
         btn_add = new JButton("+");
         btn_add.addActionListener(e -> {
-            addTab(tabIndex.getAndIncrement() + "");
+            addTab("  " + tabIndex.getAndIncrement() + "  ");
         });
         add(btn_add, BorderLayout.NORTH);
 
